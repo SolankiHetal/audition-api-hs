@@ -1,40 +1,42 @@
 package com.audition.web;
 
 import com.audition.model.AuditionPost;
+import com.audition.model.Comment;
 import com.audition.service.AuditionService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class AuditionController {
 
-    @Autowired
-    AuditionService auditionService;
+    private final AuditionService auditionService;
 
-    // TODO Add a query param that allows data filtering. The intent of the filter is at developers discretion.
     @RequestMapping(value = "/posts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<AuditionPost> getPosts() {
-
-        // TODO Add logic that filters response data based on the query param
-
-        return auditionService.getPosts();
+    public @ResponseBody List<AuditionPost> getPosts(@RequestParam("userId") final Integer userId) {
+        return auditionService.getPosts(userId);
     }
 
     @RequestMapping(value = "/posts/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody AuditionPost getPosts(@PathVariable("id") final String postId) {
-        final AuditionPost auditionPosts = auditionService.getPostById(postId);
-
-        // TODO Add input validation
-
-        return auditionPosts;
+    public @ResponseBody AuditionPost getPostsById(@PathVariable("id") final Integer postId) {
+        return auditionService.getPostById(postId);
     }
 
-    // TODO Add additional methods to return comments for each post. Hint: Check https://jsonplaceholder.typicode.com/
+    @RequestMapping(value = "posts/{id}/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody AuditionPost getPostWithComments(@PathVariable("id") final Integer postId) {
+        return auditionService.getPostWithComments(postId);
+    }
+
+    @RequestMapping(value = "/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Comment> getComments(@RequestParam("postId") final Integer postId) {
+        return auditionService.getCommentsByPostId(postId);
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.audition.common.logging;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Component;
@@ -58,12 +57,14 @@ public class AuditionLogger {
     }
 
     private String createStandardProblemDetailMessage(final ProblemDetail standardProblemDetail) {
-        // TODO Add implementation here.
-        return StringUtils.EMPTY;
+        return "Standard Problem Detail"
+            + "\nTitle: " + standardProblemDetail.getTitle()
+            + " Status: " + standardProblemDetail.getStatus()
+            + " Detail: " + standardProblemDetail.getDetail()
+            + " Instance: " + standardProblemDetail.getInstance();
     }
 
     private String createBasicErrorResponseMessage(final Integer errorCode, final String message) {
-        // TODO Add implementation here.
-        return StringUtils.EMPTY;
+        return "Error occurred with " + errorCode + "and" + message;
     }
 }
